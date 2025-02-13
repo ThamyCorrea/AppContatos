@@ -18,14 +18,11 @@ public class Pessoas {
 	@Column(nullable = false, length = 150)
 	private String nome;
 	
-	@Column(nullable = false, unique = true, length = 14)
-	private String cpf;
-	
 	@Column(nullable = true, length = 150)
 	private String endereco;
 	
 	@Column(nullable = true, length = 10)
-	private Integer cep;
+	private String cep;
 	
 	@Column(nullable = true, length = 100)
 	private String cidade;
@@ -37,7 +34,7 @@ public class Pessoas {
 		
 	}
 
-	public Pessoas(Long id, String nome, String endereco, Integer cep, String cidade, String uf) {
+	public Pessoas(Long id, String nome, String endereco, String cep, String cidade, String uf) {
 		this.id = id;
 		this.nome = nome;
 		this.endereco = endereco;
@@ -70,11 +67,11 @@ public class Pessoas {
 		this.endereco = endereco;
 	}
 
-	public Integer getCep() {
+	public String getCep() {
 		return cep;
 	}
 
-	public void setCep(Integer cep) {
+	public void setCep(String cep) {
 		this.cep = cep;
 	}
 
@@ -92,6 +89,11 @@ public class Pessoas {
 
 	public void setUf(String uf) {
 		this.uf = uf;
+	}
+
+	@Override
+	public String toString() {
+		return "Pessoas [id=" + id + ", nome=" + nome;
 	}
 	
 	
