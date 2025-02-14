@@ -25,7 +25,7 @@ import com.thamirisoc.AppContatos.service.PessoasService;
 public class PessoasController {
 
 	@Autowired
-	PessoasService pessoaService;
+	private PessoasService pessoaService;
 	
 	@PostMapping
 	public ResponseEntity<Pessoas> CriarPessoa(@RequestBody Pessoas pessoa){
@@ -86,9 +86,7 @@ public class PessoasController {
 	     } else {    	    	 
 	    	return ResponseEntity.ok(pessoaEditada);
 	    }
-	}
-	
-	
+	}	
 	
 	@DeleteMapping("/{id}")
 	public void deletarPessoa(@PathVariable Long id){

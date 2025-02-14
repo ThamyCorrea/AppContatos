@@ -15,7 +15,7 @@ import com.thamirisoc.AppContatos.repository.PessoasRepository;
 public class PessoasService {
 	
 	@Autowired
-	PessoasRepository pessoasRepository;
+	private PessoasRepository pessoasRepository;
 	
 	
 		
@@ -55,6 +55,7 @@ public class PessoasService {
 	            pessoaPresente.getCidade(), 
 	            pessoaPresente.getUf() 
 	        );
+	        
 	        
 	        return Optional.of(malaDireta); 
 	    }
