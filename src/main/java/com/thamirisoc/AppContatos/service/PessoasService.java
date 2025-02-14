@@ -30,7 +30,7 @@ public class PessoasService {
 			
 		}catch(Exception e) {
 			System.err.println("Erro ao inserir dados pessoais!" +
-							pessoa.toString() + ": " + e.getMessage());
+								pessoa.toString() + ": " + e.getMessage());
 			return null;
 		}
 		
@@ -60,26 +60,38 @@ public class PessoasService {
 	    }
 	    
 	    return Optional.empty();
-	}
+    }
+	
 	
 	public List<Pessoas> listarPessoas(){
 		return pessoasRepository.findAll();
 	}
 
-	public Pessoas editar(Pessoas pessoa) {
-		Optional<Pessoas> encontrarPessoa = pessoasRepository.findById(pessoa.getId());
-		if(encontrarPessoa.isPresent()) {
-			Pessoas pessoaEditada = encontrarPessoa.get();
-			pessoaEditada.setNome(pessoa.getNome());
-			pessoaEditada.setEndereco(pessoa.getEndereco());
-			pessoaEditada.setCep(pessoa.getCep());
-			pessoaEditada.setCidade(pessoa.getCidade());
-			pessoaEditada.setUf(pessoa.getUf());
-			
-			return pessoasRepository.save(pessoaEditada);
-		}
-		return pessoasRepository.save(pessoa);
+	public Pessoas editarPessoa(Long id, Pessoas pessoa) {
+	    try {
+	        Optional<Pessoas> encontrarPessoa = pessoasRepository.findById(id);
+
+	        if (encontrarPessoa.isPresent()) {
+	            Pessoas pessoaEditada = encontrarPessoa.get();
+	            pessoaEditada.setNome(pessoa.getNome());
+	            pessoaEditada.setEndereco(pessoa.getEndereco());
+	            pessoaEditada.setCep(pessoa.getCep());
+	            pessoaEditada.setCidade(pessoa.getCidade());
+	            pessoaEditada.setUf(pessoa.getUf());
+
+	            return pessoasRepository.save(pessoaEditada);
+	        }
+	        
+	        return pessoasRepository.save(pessoa);
+	        
+	    } catch (Exception e) {
+	    	throw new RuntimeException("Erro ao editar pessoa: " + e.getMessage(), e);
+	    }
 	}
-		
+
+	public void deletar(Long id) {
+		pessoasRepository.deleteById(id);
+				
+	}
 }
 

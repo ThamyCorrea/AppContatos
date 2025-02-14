@@ -7,9 +7,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +49,7 @@ public class PessoasController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Pessoas>> buscarPessoaPorId(@PathVariable long id){
+	public ResponseEntity<Optional<Pessoas>> buscarPessoaPorId(@PathVariable Long id){
 		Optional<Pessoas> pessoa = pessoaService.buscarId(id);
 		if(pessoa.isEmpty()) {
 			return ResponseEntity.notFound().build();
@@ -72,6 +74,34 @@ public class PessoasController {
 	        return ResponseEntity.notFound().build();
 	    }
 	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Pessoas> editarPessoa(@PathVariable Long id, @RequestBody Pessoas pessoa){
+		
+		Pessoas pessoaEditada = pessoaService.editarPessoa(id, pessoa);			
+		
+		if (pessoaEditada == null) { 
+			return ResponseEntity.badRequest().build();			
+	       
+	     } else {    	    	 
+	    	return ResponseEntity.ok(pessoaEditada);
+	    }
+	}
+	
+	
+	
+	@DeleteMapping("/{id}")
+	public void deletarPessoa(@PathVariable Long id){
+		pessoaService.deletar(id);
+		
+		if(pessoaService.buscarId(id) == null) {
+			ResponseEntity.notFound();
+		}else {
+			ResponseEntity.ok(null);
+		}
+			
+	}
+	
 
 	
 	
