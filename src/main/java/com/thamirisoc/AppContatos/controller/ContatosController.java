@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,8 +45,8 @@ public class ContatosController {
 	}
 	
 	@GetMapping("/pessoa/{id}")
-	public ResponseEntity<Optional<Contatos>> buscarPorIdPessoa(@PathVariable Long id){
-		Optional<Contatos> buscarId = contatoService.buscarContatosPorPessoa(id);
+	public ResponseEntity<List<Contatos>> buscarPorIdPessoa(@PathVariable Long id){
+		List<Contatos> buscarId = contatoService.buscarContatosPorPessoa(id);
 		if(buscarId.isEmpty()) {
 			return ResponseEntity.badRequest().build();
 		
@@ -63,6 +66,22 @@ public class ContatosController {
 			return ResponseEntity.ok(buscarId);
 		}
 		
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity <Contatos> editar(@PathVariable Long id, @RequestBody Contatos contato){
+		Contatos editarContato = contatoService.editarContato(id, contato);
+		if(editarContato == null) {
+			return ResponseEntity.badRequest().build();
+		}else {
+			return ResponseEntity.ok(editarContato);
+		}
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deletar(@PathVariable Long id){
+		contatoService.deletarContato(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }

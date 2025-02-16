@@ -1,6 +1,7 @@
 package com.thamirisoc.AppContatos.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +44,13 @@ public class ContatosService {
 		return contatoRepository.findById(id);
 	}
 	
-	public Optional<Contatos> buscarContatosPorPessoa(Long pessoaId) {
-	    return contatoRepository.findById(pessoaId);
-	}
+	public List<Contatos> buscarContatosPorPessoa(Long pessoaId) {
+        return contatoRepository.findByPessoaId(pessoaId);
+    }
 
 		
-	public Contatos editarContato(Contatos contato) {
-		Optional<Contatos> buscarContato = contatoRepository
-				.findById(contato.getId());
+	public Contatos editarContato(Long id, Contatos contato) {
+		Optional<Contatos> buscarContato = contatoRepository.findById(id);
 		if(buscarContato.isPresent()) {
 			Contatos contatoAtualizado = buscarContato.get();
 			contatoAtualizado.setTipoContato(contato.getTipoContato());
