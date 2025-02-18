@@ -6,22 +6,35 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.thamirisoc.AppContatos.model.Contatos;
 import com.thamirisoc.AppContatos.model.MalaDireta;
 import com.thamirisoc.AppContatos.model.Pessoas;
+import com.thamirisoc.AppContatos.repository.ContatosRepository;
 import com.thamirisoc.AppContatos.repository.PessoasRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.thamirisoc.AppContatos.controller.BadRequestPersonalizada;
 
 @Service
 public class PessoasService {
 	
 	@Autowired
-	private PessoasRepository pessoasRepository;	
+	private PessoasRepository pessoasRepository;
+	
+	@Autowired
+	private ContatosRepository contatoRepository;
+	
 		
 	public Pessoas criar(Pessoas pessoa) {		
 				
 		if(pessoa.getNome() == null || pessoa.getNome().trim().isEmpty()) {
-			throw new BadRequestPersonalizada("Nome não pode ser nulo e nem vazio \n");			
+			throw new BadRequestPersonalizada("Nome não pode ser nulo e nem vazio");			
 		}
+		
+		if(pessoa.getUf().length() != 2 || !pessoa.getUf().matches("[A-Z]{2}") ) {
+			throw new BadRequestPersonalizada("UF precisa ter 2 letras maiúsculas");
+		}		
 		try {			
 			return pessoasRepository.save(pessoa);
 			
@@ -89,12 +102,17 @@ public class PessoasService {
 	    }
 	}
 
-	public void deletar(Long id) {		
-		if (!pessoasRepository.existsById(id)) {
-	        throw new BadRequestPersonalizada("ID " + id + " não encontrado.");
+	@Transactional
+	public void deletar(Long pessoaId) {		
+		if (!pessoasRepository.existsById(pessoaId)) {
+	        throw new BadRequestPersonalizada("ID " + pessoaId + " não encontrado.");
 	    }		
-	    pessoasRepository.deleteById(id);
-				
+		List<Contatos> contatos = contatoRepository.findByPessoaId(pessoaId);
+		
+		for(Contatos contato : contatos) {
+			contatoRepository.delete(contato);
+		}
+		pessoasRepository.deleteById(pessoaId);						
 	}
 }
 

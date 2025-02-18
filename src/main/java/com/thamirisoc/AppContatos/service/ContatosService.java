@@ -33,10 +33,10 @@ public class ContatosService {
 		if(contato.getTipoContato() == null) {
 			throw new BadRequestPersonalizada("Tipo de contato não pode ser nulo!");
 		}
-		
+			    
 		if (contato.getPessoa() == null || contato.getPessoa().getId() == null) {
 			throw new BadRequestPersonalizada("Pessoa não encontrada!");
-	    }
+	    }		
 		
 	    Optional<Pessoas> buscarPessoaPorId = pessoaRepository.findById(contato.getPessoa().getId());
 	    if (buscarPessoaPorId.isEmpty()) {
@@ -54,11 +54,21 @@ public class ContatosService {
 	}	    
 	
 	public Optional<Contatos> buscarId(Long id) {
-		return contatoRepository.findById(id);
+		Optional<Contatos> contatos = contatoRepository.findById(id);
+		
+		if (contatos.isEmpty()) {
+            throw new BadRequestPersonalizada("ID: " + id + " não encontrado");
+        }        
+        return contatos;
 	}
 	
 	public List<Contatos> buscarContatosPorPessoa(Long pessoaId) {
-        return contatoRepository.findByPessoaId(pessoaId);
+        List <Contatos> contatos = contatoRepository.findByPessoaId(pessoaId);
+        
+        if (contatos.isEmpty()) {
+            throw new BadRequestPersonalizada("ID: " + pessoaId + " não encontrado");
+        }        
+        return contatos;
     }
 		
 	public Contatos editar(Long id, Contatos contato) {

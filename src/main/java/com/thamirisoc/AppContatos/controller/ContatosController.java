@@ -28,7 +28,8 @@ public class ContatosController {
 	@Autowired
 	private ContatosService contatoService;
 	
-	@Operation(summary = "Editar contato. Observação: No Request body, excluir ID e dados da pessoa e retirar ',' no final do contato")
+	@Operation(summary = "Cria um novo contato associado a uma pessoa. Exemplo de Request Body: "
+			+ "\"tipoContato\"" + ":" + "int, " + "\"contato\"" + ":" + "\"string,\"" + "\"pessoa\"" + ":" + "{\"id\"" + ":" + "int}")
 	@PostMapping
 	public ResponseEntity<List<Contatos>> criar(@RequestBody List<Contatos> contatos){        
 	    List<Contatos> contatosCriados = new ArrayList<>();
@@ -71,7 +72,8 @@ public class ContatosController {
 		}		
 	}
 	
-	@Operation(summary = "Editar contato. Observação: No Request body, excluir ID e dados da pessoa e retirar ',' no final do contato")
+	@Operation(summary = "Editar um novo contato associado a uma pessoa. Exemplo de Request Body: "
+			+ "\"tipoContato\"" + ":" + "int, " + "\"contato\"" + ":" + "\"string,\"" + "\"pessoa\"" + ":" + "{\"id\"" + ":" + "int}")
 	@PutMapping("/{id}")
 	public ResponseEntity <Contatos> editar(@PathVariable Long id, @RequestBody Contatos contato){
 		Contatos editarContato = contatoService.editar(id, contato);

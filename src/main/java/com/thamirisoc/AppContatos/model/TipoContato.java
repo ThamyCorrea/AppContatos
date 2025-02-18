@@ -1,5 +1,7 @@
 package com.thamirisoc.AppContatos.model;
 
+import com.thamirisoc.AppContatos.controller.BadRequestPersonalizada;
+
 public enum TipoContato {
     
     TELEFONE(0),
@@ -18,18 +20,25 @@ public enum TipoContato {
     public int getCodigoContato() {
         return codigoContato;
     }
-
-    public static TipoContato fromCodigoContato(int codigoContato) {
+    
+    public static boolean codigoValido(int codigo) {
         for (TipoContato tipo : TipoContato.values()) {
-            if (tipo.getCodigoContato() == codigoContato) {
-                return tipo;
+            if (tipo.getCodigoContato() == codigo) {
+                return true;
             }
         }
-        
-        throw new IllegalArgumentException("Código inválido! "
-        									+ "Escolha 0 para Telefone, "
-        									+ "1 para Celular, "
-        									+ "2 para E-mail e "
-        									+ "3 para URL."); 
+        return false;
+    }
+
+    public static TipoContato fromCodigoContato(int codigoContato) {
+    	switch (codigoContato) {
+        case 0: return TELEFONE;
+        case 1: return CELULAR;
+        case 2: return EMAIL;
+        case 3: return URL;
+        default:
+            throw new BadRequestPersonalizada("Código inválido! Escolha entre: 0 (Telefone), 1 (Celular), 2 (E-mail) ou 3 (URL)");
+            /*Não tive tempo hábil para conseguir fazer chamar o throw, mesmo chamando no serviço para validação. Irá ficar como uma melhoria futura*/
+    	}
     }
 }

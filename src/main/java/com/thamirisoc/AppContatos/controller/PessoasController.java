@@ -31,7 +31,7 @@ public class PessoasController {
 	@Autowired
 	private PessoasService pessoaService;
 	
-	@Operation(summary = "Criar pessoa. Observação: No Request body, excluir ID e dados do contatos e retirar ',' no final da UF")
+	@Operation(summary = "Criar pessoa. Observação: No Request body, excluir ID, dados do contatos e retirar ',' ao final da UF")
 	@PostMapping
 	public ResponseEntity<Pessoas> Criar(@RequestBody Pessoas pessoa){
 		Pessoas newPessoa = pessoaService.criar(pessoa);	
@@ -86,7 +86,7 @@ public class PessoasController {
 	    }
 	}
 	
-	@Operation(summary = "Editar pessoa. Observação: No Request body, excluir ID e dados do contatos e retirar ',' no final da UF")
+	@Operation(summary = "Editar pessoa. Observação: No Request body, excluir ID e dados do contatos e retirar ',' ao final da UF")
 	@PutMapping("/{id}")
 	public ResponseEntity<Pessoas> editar(@PathVariable Long id, @RequestBody Pessoas pessoa){		
 		Pessoas pessoaEditada = pessoaService.editar(id, pessoa);	
