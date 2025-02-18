@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.thamirisoc.AppContatos.model.Contatos;
 import com.thamirisoc.AppContatos.service.ContatosService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/contato")
 public class ContatosController {	
@@ -26,51 +28,54 @@ public class ContatosController {
 	@Autowired
 	private ContatosService contatoService;
 	
+	@Operation(summary = "Editar contato. Observação: No Request body, excluir ID e dados da pessoa e retirar ',' no final do contato")
 	@PostMapping
-	public ResponseEntity<List<Contatos>> criarContato(@RequestBody List<Contatos> contatos){        
+	public ResponseEntity<List<Contatos>> criar(@RequestBody List<Contatos> contatos){        
 	    List<Contatos> contatosCriados = new ArrayList<>();
-
+	    
 	    for (Contatos contato : contatos) {  
-	        Contatos contatoCriado = contatoService.criarContato(contato);
+	        Contatos contatoCriado = contatoService.criar(contato);
+	        
 	        if (contatoCriado != null) {
 	            contatosCriados.add(contatoCriado);
 	        }
 	    }
-
 	    if (contatosCriados.isEmpty()) {
-	        return ResponseEntity.badRequest().build();
+	        throw new BadRequestPersonalizada("Nenhum contato criado");
 	    }
-
-	    return ResponseEntity.ok(contatosCriados);
+	    
+	    return ResponseEntity.status(HttpStatus.CREATED).body(contatosCriados);
 	}
 	
+	@Operation(summary = "Listar todos os contatos pelo ID da pessoa")
 	@GetMapping("/pessoa/{id}")
 	public ResponseEntity<List<Contatos>> buscarPorIdPessoa(@PathVariable Long id){
 		List<Contatos> buscarId = contatoService.buscarContatosPorPessoa(id);
-		if(buscarId.isEmpty()) {
-			return ResponseEntity.badRequest().build();
 		
+		if(buscarId.isEmpty()) {
+			return ResponseEntity.badRequest().build();		
 		} else{
 			return ResponseEntity.ok(buscarId);
-		}
-		
-	}
+		}		
+	}	
 	
+	@Operation(summary = "Buscar contato por ID")
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Contatos>> buscarPorIdContato(@PathVariable Long id){
+	public ResponseEntity<Optional<Contatos>> buscarId(@PathVariable Long id){
 		Optional<Contatos> buscarId = contatoService.buscarId(id);
-		if(buscarId.isEmpty()) {
-			return ResponseEntity.badRequest().build();
 		
+		if(buscarId.isEmpty()) {
+			return ResponseEntity.badRequest().build();		
 		} else{
 			return ResponseEntity.ok(buscarId);
-		}
-		
+		}		
 	}
 	
+	@Operation(summary = "Editar contato. Observação: No Request body, excluir ID e dados da pessoa e retirar ',' no final do contato")
 	@PutMapping("/{id}")
 	public ResponseEntity <Contatos> editar(@PathVariable Long id, @RequestBody Contatos contato){
-		Contatos editarContato = contatoService.editarContato(id, contato);
+		Contatos editarContato = contatoService.editar(id, contato);
+		
 		if(editarContato == null) {
 			return ResponseEntity.badRequest().build();
 		}else {
@@ -78,10 +83,15 @@ public class ContatosController {
 		}
 	}
 	
+	@Operation(summary = "Deletar contato por ID")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletar(@PathVariable Long id){
-		contatoService.deletarContato(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<?> delete(@PathVariable Long id){
+		try {
+	        contatoService.deletar(id);
+	        return ResponseEntity.noContent().build(); // 204 - No Content
+	    } catch (BadRequestPersonalizada e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	    }	
 	}
 
 }
