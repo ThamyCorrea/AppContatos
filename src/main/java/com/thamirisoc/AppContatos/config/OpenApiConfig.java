@@ -17,9 +17,9 @@ public class OpenApiConfig {
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
                 .info(new Info()
-                        .title("Título API")
-                        .description("Descrição API")
-                        .contact(new Contact().name("Nome").email("Email").url("URL"))
-                        .version("Versão API")); 
+                        .title("AppContato")
+                        .description("Este projeto é uma API REST desenvolvida com Spring Boot, que permite o cadastro, edição, leitura e remoção de pessoas e seus contatos. ")
+                        .contact(new Contact().name("Thamiris"))
+                        ); 
     }
 }
