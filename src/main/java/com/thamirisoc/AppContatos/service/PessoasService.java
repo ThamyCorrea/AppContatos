@@ -1,6 +1,5 @@
 package com.thamirisoc.AppContatos.service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -10,21 +9,19 @@ import org.springframework.stereotype.Service;
 import com.thamirisoc.AppContatos.model.MalaDireta;
 import com.thamirisoc.AppContatos.model.Pessoas;
 import com.thamirisoc.AppContatos.repository.PessoasRepository;
+import com.thamirisoc.AppContatos.controller.BadRequestPersonalizada;
 
 @Service
 public class PessoasService {
 	
 	@Autowired
-	private PessoasRepository pessoasRepository;
-	
-	
+	private PessoasRepository pessoasRepository;	
 		
-	public Pessoas criarPessoa(Pessoas pessoa) {
-		
-		if(pessoa.getNome() == null) {
-			System.out.println("Nome precisa ser preenchido");
-			return null;
-		}		
+	public Pessoas criar(Pessoas pessoa) {		
+				
+		if(pessoa.getNome() == null || pessoa.getNome().trim().isEmpty()) {
+			throw new BadRequestPersonalizada("Nome não pode ser nulo e nem vazio \n");			
+		}
 		try {			
 			return pessoasRepository.save(pessoa);
 			
@@ -32,8 +29,7 @@ public class PessoasService {
 			System.err.println("Erro ao inserir dados pessoais!" +
 								pessoa.toString() + ": " + e.getMessage());
 			return null;
-		}
-		
+		}		
 	}
 	
 	
@@ -64,14 +60,17 @@ public class PessoasService {
     }
 	
 	
-	public List<Pessoas> listarPessoas(){
+	public List<Pessoas> listar(){
 		return pessoasRepository.findAll();
 	}
 
-	public Pessoas editarPessoa(Long id, Pessoas pessoa) {
+	public Pessoas editar(Long id, Pessoas pessoa) {
 	    try {
 	        Optional<Pessoas> encontrarPessoa = pessoasRepository.findById(id);
-
+	        
+	        if(pessoa.getNome() == null || pessoa.getNome().trim().isEmpty()) {
+				throw new BadRequestPersonalizada("Nome não pode ser nulo e nem vazio \n");			
+			}
 	        if (encontrarPessoa.isPresent()) {
 	            Pessoas pessoaEditada = encontrarPessoa.get();
 	            pessoaEditada.setNome(pessoa.getNome());
@@ -90,8 +89,11 @@ public class PessoasService {
 	    }
 	}
 
-	public void deletar(Long id) {
-		pessoasRepository.deleteById(id);
+	public void deletar(Long id) {		
+		if (!pessoasRepository.existsById(id)) {
+	        throw new BadRequestPersonalizada("ID " + id + " não encontrado.");
+	    }		
+	    pessoasRepository.deleteById(id);
 				
 	}
 }
