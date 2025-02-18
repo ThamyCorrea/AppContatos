@@ -11,7 +11,8 @@ public class BadRequestPersonalizada extends RuntimeException{
 	public BadRequestPersonalizada(String mensagem) {
 		System.out.print(mensagem);
 	}
-
+	
+	
 }
 
 
