@@ -4,13 +4,13 @@ Este projeto é uma API REST desenvolvida com Spring Boot, que permite o cadastr
 
 ## Tecnologias Utilizadas
 
-- Java 21
+- Java 21 (https://www.oracle.com/br/java/technologies/downloads/#java21)
 
 - Spring Boot
 
 - Spring Data JPA
 
-- Swagger OpenAPI
+- Swagger OpenAPI 
 
 - Banco de Dados H2 (para testes) ou PostgreSQL
 
@@ -91,17 +91,59 @@ Dependência no pom.xml
 
 ✅Pessoas
 - Criar Pessoa: POST /api/pessoas
+**Request Body:**
+  ```json
+   
+    {  
+      "nome": "string",  
+      "endereco": "string",  
+      "cep": "string",  
+      "cidade": "string",  
+      "uf": "string"  (aceita apenas 2 caracteres maiúsculos)  
+    }  
+  
 - Obter Pessoa por ID: GET /api/pessoas/{id}
 - Obter Pessoa por ID para Mala Direta GET /api/pessoas/malaDireta/{id}
 - Listar todas as Pessoas: GET /api/pessoas
 - Atualizar Pessoa: PUT /api/pessoas/{id}
+  **Request Body:**
+  ```json
+    
+    {  
+      "nome": "string",
+      "endereco": "string",  
+      "cep": "string",  
+      "cidade": "string",  
+      "uf": "string"  (aceita apenas 2 caracteres maiúsculos)  
+    }  
+  
 - Deletar Pessoa: DELETE /api/pessoas/{id}
 
 ✅Contatos
 - Criar Contato: POST /api/contatos
+  
+**Request Body:**
+  ```json
+  [  
+    {  
+        "tipoContato": "string",  (Escolha entre: 0 (Telefone), 1 (Celular), 2 (E-mail) ou 3 (URL))
+        "contato": "string",
+        "pessoa": {"id": int}  
+    }  
+  ]
+```
 - Obter todos os Contatos de uma Pessoa: GET /api/contatos/pessoas/{idPessoa}
 - Obter Contato por ID: GET /api/contatos/{id}
 - Atualizar Contato: PUT /api/contatos/{id}
+  **Request Body:**
+  ```json
+  [  
+    {  
+        "tipoContato": "string", (Escolha entre: 0 (Telefone), 1 (Celular), 2 (E-mail) ou 3 (URL))
+        "contato": "string",
+        "pessoa": {"id": int}  
+    }  
+  ]
 - Deletar Contato: DELETE /api/contatos/{id}
 
 ## Testando a API
@@ -111,6 +153,28 @@ Após iniciar o projeto, você pode testar os endpoints usando:
 Swagger UI: http://localhost:8080/swagger-ui.html
 
 Postman ou Insomnia
+
+## Ajustes e melhorias
+### Projeto em constante desenvolvimento
+- [ ] Adicionar mais tipos de contato
+- [ ] Melhoras as validações dos atributos
+- [ ] Criar um sistema de gerenciamento de erros mais robusto
+- [ ] Implemente autenticação e autorização para proteger os endpoints sensíveis
+- [ ] Adicionar diferentes níveis de acesso (por exemplo, administrador, usuário comum) para gerenciar permissões
+- [ ] Desenvolver uma interface gráfica (frontend) para interagir com a API
+
+## Aceito sugestões de melhorias 🤩
+
+Para contribuir, siga estas etapas:
+
+1. Bifurque este repositório.
+2. Crie um branch: `git checkout -b <nome_branch>`.
+3. Faça suas alterações e confirme-as: `git commit -m '<mensagem_commit>'`
+4. Envie para o branch original: `git push -u origin <nome_branch>`
+5. Crie a solicitação de pull.
+
+Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
 
 ## 🚩Autor
 
